@@ -11,11 +11,14 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { OverviewComponent } from './overview/overview.component';
+import { DetailsComponent } from './details/details.component';
+import { FormsModule } from '@angular/forms';
+import { NewComponent } from './new/new.component';
 
 @NgModule({
-  declarations: [AppComponent, OverviewComponent],
+  declarations: [AppComponent, OverviewComponent, DetailsComponent, NewComponent],
   entryComponents: [],
-  imports: [IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot(), BrowserModule],
+  imports: [IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot(), BrowserModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent]
 })

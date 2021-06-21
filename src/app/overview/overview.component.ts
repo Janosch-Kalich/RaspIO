@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -14,7 +15,7 @@ export class OverviewComponent implements OnInit {
   pins: any;
   idarray: any[] = [];
 
-  constructor(private http: HttpClient, private storage: Storage, private alertcontroller: AlertController) {}
+  constructor(private http: HttpClient, private storage: Storage, private alertcontroller: AlertController, private router: Router) {}
 
   ngOnInit() {
     this.storage.create();
@@ -75,5 +76,13 @@ export class OverviewComponent implements OnInit {
       console.log(pin)
       this.idarray.push(pin);
     }
+  }
+
+  details(id){
+    this.router.navigate(["details"], { queryParams: { id: id } });
+  }
+
+  new(){
+    this.router.navigate(["new"]);
   }
 }

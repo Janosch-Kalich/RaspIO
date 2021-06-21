@@ -25,10 +25,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-p, ul, h1, h2, h3{
+p, ul, h1, h2, h3, div{
     color: var(--ion-text-color);
 }
 
-ion-item:hover{
+ion-icon:hover{
     cursor: pointer;
 }

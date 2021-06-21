@@ -1,9 +1,9 @@
 <div>
   <ion-toolbar style="display: inline-block;">
-    <ion-button color="success" slot="secondary" style="margin-right: 1%;">Add</ion-button>
+    <ion-button color="success" slot="secondary" style="margin-right: 1.5%;" (click)="new()">New</ion-button>
     <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
   <ion-list *ngFor="let id of idarray">
-    <ion-item>{{ pins.pins[id].name }}</ion-item>
+    <ion-item (click)="details(id)">{{ pins.pins[id].name }}</ion-item>
   </ion-list>
 </div>
