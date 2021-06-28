@@ -14,9 +14,10 @@ import { OverviewComponent } from './overview/overview.component';
 import { DetailsComponent } from './details/details.component';
 import { FormsModule } from '@angular/forms';
 import { NewComponent } from './new/new.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
-  declarations: [AppComponent, OverviewComponent, DetailsComponent, NewComponent],
+  declarations: [AppComponent, OverviewComponent, DetailsComponent, NewComponent, SettingsComponent],
   entryComponents: [],
   imports: [IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot(), BrowserModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

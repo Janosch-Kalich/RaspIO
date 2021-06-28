@@ -1,6 +1,7 @@
 <div>
   <ion-toolbar style="display: inline-block;">
-    <ion-button color="success" slot="secondary" style="margin-right: 1.5%;" (click)="new()">New</ion-button>
+    <ion-icon name="settings-sharp" slot="end" style="margin-right: 1.5%;" size="large" (click)="router.navigate(['/settings'])"></ion-icon>
+    <ion-button color="success" slot="secondary" style="margin-right: 1%;" (click)="new()">New</ion-button>
     <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
   <ion-list *ngFor="let id of idarray">

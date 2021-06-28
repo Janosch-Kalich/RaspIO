@@ -16,6 +16,9 @@ export class DetailsComponent implements OnInit {
   pincopy: any;
   id: string;
   url: string;
+
+  pins: any[] = [3, 5, 7, 8, 10, 11,12, 13, 15, 16, 18, 19, 21, 22, 23, 24, 26, 27, 28, 29, 31, 32, 33, 35, 36, 37, 38, 40];
+  
   constructor(private http: HttpClient, private storage: Storage, private router: Router, private route: ActivatedRoute, private alertcotroller: AlertController) { }
 
   ngOnInit() {
@@ -28,9 +31,7 @@ export class DetailsComponent implements OnInit {
           this.url = url;
           this.http.post("http://" + url + "/getpin", { "id": this.id }).subscribe(pin => {
             this.pin = JSON.parse(JSON.stringify(pin));
-            
             this.pincopy = pin;
-            console.log(this.pin);
           });
         }
       });  
@@ -39,12 +40,12 @@ export class DetailsComponent implements OnInit {
 
   save(attr, val){
     console.log(this.pincopy[attr]);
-    if(val || attr == "desc"){
+    if(val || attr == "desc" || attr == "default"){
       this.pincopy[attr] = val;
       let data = { id: this.id, props: {  }};
       data.props[attr] = val;
       this.http.post("http://" + this.url + "/set", data).subscribe(res => {
-        console.log(res);
+        this.pin = res;
       });
     }
     else{
@@ -65,7 +66,7 @@ export class DetailsComponent implements OnInit {
 
   setpin(state){
     this.http.post("http://" + this.url + "/setpin", { id: this.id, state: state }).subscribe(res => {
-      console.log(res)
+      this.pin = res;
     });
   }
 }

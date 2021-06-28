@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { NewComponent } from './new/new.component';
 import { OverviewComponent } from './overview/overview.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'new',
     component: NewComponent
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent
   },
   {
     path: '',

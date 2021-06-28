@@ -10,45 +10,27 @@
     <ion-input [(ngModel)]="pin.desc" #ctrl="ngModel" (change)="save('desc', pin.desc)"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label>Pin: </ion-label>
-    <ion-select [(ngModel)]="pin.pin" #ctrl="ngModel" (ionChange)="save('pin', pin.pin)">
-      <ion-select-option value="3">GPIO 3</ion-select-option>
-      <ion-select-option value="5">GPIO 5</ion-select-option>
-      <ion-select-option value="7">GPIO 7</ion-select-option>
-      <ion-select-option value="8">GPIO 8</ion-select-option>
-      <ion-select-option value="10">GPIO 10</ion-select-option>
-      <ion-select-option value="11">GPIO 11</ion-select-option>
-      <ion-select-option value="12">GPIO 12</ion-select-option>
-      <ion-select-option value="13">GPIO 13</ion-select-option>
-      <ion-select-option value="15">GPIO 15</ion-select-option>
-      <ion-select-option value="16">GPIO 16</ion-select-option>
-      <ion-select-option value="18">GPIO 18</ion-select-option>
-      <ion-select-option value="19">GPIO 19</ion-select-option>
-      <ion-select-option value="21">GPIO 21</ion-select-option>
-      <ion-select-option value="22">GPIO 22</ion-select-option>
-      <ion-select-option value="23">GPIO 23</ion-select-option>
-      <ion-select-option value="24">GPIO 24</ion-select-option>
-      <ion-select-option value="26">GPIO 26</ion-select-option>
-      <ion-select-option value="27">GPIO 27</ion-select-option>
-      <ion-select-option value="28">GPIO 28</ion-select-option>
-      <ion-select-option value="29">GPIO 29</ion-select-option>
-      <ion-select-option value="31">GPIO 31</ion-select-option>
-      <ion-select-option value="32">GPIO 32</ion-select-option>
-      <ion-select-option value="33">GPIO 33</ion-select-option>
-      <ion-select-option value="35">GPIO 35</ion-select-option>
-      <ion-select-option value="36">GPIO 36</ion-select-option>
-      <ion-select-option value="37">GPIO 37</ion-select-option>
-      <ion-select-option value="38">GPIO 38</ion-select-option>
-      <ion-select-option value="40">GPIO 40</ion-select-option>
+    <ion-label>Physical Pin (<a href="https://pinout.xyz">Pinout</a>): </ion-label>
+    <ion-select [(ngModel)]="pin.pin" #ctrl="ngModel"(ionChange)="save('pin', pin.pin)">
+      <ion-select-option *ngFor="let usablepin of pins" [value]="usablepin">Pin {{ usablepin }}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>Type: </ion-label>
-    <ion-select [(ngModel)]="pin.type" #ctrl="ngModel" (ionChange)="save('typ', pin.type)">
+    <ion-select [(ngModel)]="pin.type" #ctrl="ngModel" (ionChange)="save('type', pin.type)">
       <ion-select-option value="out">Output</ion-select-option>
       <ion-select-option value="in">Input</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-button (click)="setpin(1)" color="success" style="width: 40%; height: 30%;">On</ion-button>
-  <ion-button (click)="setpin(0)" color="danger">Off</ion-button>
+  <ion-item *ngIf="pin.type == 'out'">
+    <ion-label>Default: </ion-label>
+    <ion-select [(ngModel)]="pin.default" #ctrl="ngModel" (ionChange)="save('default', pin.default)">
+      <ion-select-option [value]=1>On</ion-select-option>
+      <ion-select-option [value]=0>Off</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button (click)="setpin(pin.state == 0 ? 1 : 0)" [color]="pin.state == 0 ? 'success' : 'danger'" style="width: 100%; height: 30%; font-size: xx-large;" *ngIf="pin.type == 'out'">Turn {{ pin.state == 0 ? "On" : "Off" }}</ion-button>
+  <div style="width: 100%; height: 30%; background-color: var(--ion-color-danger); border-radius: 8px; justify-content: center; align-items: center; display: flex; font-size: xx-large;" *ngIf="pin.type == 'in'">
+  Off
+  </div>
 </div>
