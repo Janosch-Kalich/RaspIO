@@ -5,6 +5,6 @@
   </ion-toolbar>
   <ion-item>
     <ion-label>URL: </ion-label>
-    <ion-input placeholder="raspberrypi:1234" slot="end" style="text-align: right;"></ion-input>
+    <ion-input placeholder="raspberrypi:1234" slot="end" style="text-align: right;" [(ngModel)]="url" #ctrl="ngModel" (ionChange)="save()"></ion-input>
   </ion-item>
 </div>
