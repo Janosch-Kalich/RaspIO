@@ -1,0 +1,10 @@
+.alert-wrapper{
+    display: inline-flex !important;
+    position: absolute !important;
+    width: 100% !important;
+}
+
+.deviceitem:hover{
+    background-color: var(--ion-color-primary) !important;
+    cursor: pointer;
+}

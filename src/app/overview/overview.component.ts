@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
-import { AlertController } from '@ionic/angular';
+import { AlertController, iosTransitionAnimation } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { RequestsService } from '../requests.service';
 
@@ -20,12 +20,33 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit() {
     this.requests.storageinit().then(url => {
-      this.requests.getPins().then(pins => {
-        this.pins = pins;
-        for(let pin in pins["pins"]){
-          this.idarray.push(pin);
-        }
-      })
+      this.requests.url = url;
+      if(!url){
+        this.requests.configalert((data) => {
+          console.log(data.url);
+          this.storage.set("url", data.url).then(() => {
+            this.requests.url = data.url;
+            this.requests.getPins().then(pins => {
+              this.pins = pins;
+              for(let pin in pins["pins"]){
+                this.idarray.push(pin);
+              }
+            }).catch(err => {
+              this.requests.connectionerror();
+            });
+          });
+        });
+      }
+      else {
+        this.requests.getPins().then(pins => {
+          this.pins = pins;
+          for(let pin in pins["pins"]){
+            this.idarray.push(pin);
+          }
+        }).catch(err => {
+          this.requests.connectionerror();
+        })
+      }
     });
 
       //this.pins = res["pins"];
@@ -37,7 +58,37 @@ export class OverviewComponent implements OnInit {
   }
 
   new(){
-    this.router.navigate(["new"]);
+    this.alertcontroller.create({
+      header: "New Item",
+      buttons: [
+        {
+          text: "Pin",
+          cssClass: "AlertButton",
+          handler: () => { this.newPin() }
+        },
+        {
+          text: "Websocket",
+          cssClass: "AlertButton",
+          handler: () => { this.newWS() }
+        },
+        {
+          text: "Cancel",
+          cssClass: "AlertCancelButton",
+          handler: () => {}
+        }
+      ]
+    }).then(alert => {
+      alert.present();
+    })
+
+  }
+
+  newPin(){
+    this.router.navigate(["newpin"]);
+  }
+
+  newWS(){
+    this.router.navigate(["newws"]);
   }
 
   a(){

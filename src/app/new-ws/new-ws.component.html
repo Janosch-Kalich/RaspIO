@@ -1,0 +1,42 @@
+<ion-content>
+  <ion-toolbar style="display: inline-block;">
+    <ion-title>New Websocket</ion-title>
+  </ion-toolbar>
+    <ion-slides style="min-height: 100%;" #slides>
+        <ion-slide style="min-height: 100%; display: block !important; width: 100%;">
+          <div *ngIf="devices" style="height: 100%;">
+          <!--<div style="height: 100%; display: block; width: 100%;">
+            <div *ngFor="let device of devices" style="width: 100%; margin-top: 2%; display: flex; justify-content: center;">
+              <div style="width: 95% !important; background-color: var(--ion-item-background); padding: 2%; display: flex;" class="deviceitem">
+                <ion-label style="font-size: medium;" (click)="use(device)">
+                  {{ device.name }}
+                </ion-label>
+              </div>
+            </div>
+          </div>-->
+          <div *ngFor="let device of devices" style="margin-top: 2%; display: flex; justify-content: center;">
+            <div style="width: 95% !important; background-color: var(--ion-item-background); padding: 2%; display: flex;" class="deviceitem" (click)="selectdev(device)">
+              <ion-label style="font-size: medium; flex-basis: 50%;">
+                {{ device.name }}
+              </ion-label>
+              <ion-label style="font-size: medium; flex-basis: 50%;">
+                {{ device.ip }}
+              </ion-label>
+              <ion-label style="font-size: medium; flex-basis: 50%;">
+                {{ device.mac }}
+              </ion-label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!devices">
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <ion-item style="width: 100%; text-align: right;">
+          <ion-label>Port: </ion-label>
+          <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="port" #ctrl="ngModel" placeholder="1 - 65535"></ion-input>
+        </ion-item>
+      </ion-slide>
+    </ion-slides>
+</ion-content>

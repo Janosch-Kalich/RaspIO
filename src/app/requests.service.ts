@@ -16,14 +16,12 @@ export class RequestsService implements OnInit {
     
   }
 
-  async storageinit(){
+  async storageinit(): Promise<any>{
     this.storage.create();
-    return this.storage.get("url").then(url => {
-      this.url = url;
-    })
+    return this.storage.get("url");
   }
 
-  configalert(){
+  async configalert(handler: (any)): Promise<any>{
     this.alertcontroller.create({
     header: "Raspberry Pi URL",
     message: "Enter the URL and port of the Raspberry Pi you want to control",
@@ -37,14 +35,11 @@ export class RequestsService implements OnInit {
     buttons: [
       {
         text: "Save",
-        handler: async (data) => {
-          this.storage.set("url", data.url);
-          return data.url;
-        }
+        handler: handler
       }
       ]
     }).then((alert) => {
-      alert.present();
+      return alert.present();
     });
   }
 

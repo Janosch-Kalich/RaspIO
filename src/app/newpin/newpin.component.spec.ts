@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NewComponent } from './new.component';
+import { NewPinComponent } from './newpin.component';
 
-describe('NewComponent', () => {
-  let component: NewComponent;
-  let fixture: ComponentFixture<NewComponent>;
+describe('NewPinComponent', () => {
+  let component: NewPinComponent;
+  let fixture: ComponentFixture<NewPinComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewComponent ],
+      declarations: [ NewPinComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NewComponent);
+    fixture = TestBed.createComponent(NewPinComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

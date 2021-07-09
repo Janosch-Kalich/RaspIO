@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, AngularDelegate } from '@ionic/angular';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { RequestsService } from '../requests.service';
+import { WebsocketService } from '../websocket.service';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -20,10 +22,11 @@ export class DetailsComponent implements OnInit {
   id: string;
   url: string;
   socket: WebSocketSubject<any>;
+  wsobs: Subscription;
 
   pins: any[] = [3, 5, 7, 8, 10, 11,12, 13, 15, 16, 18, 19, 21, 22, 23, 24, 26, 27, 28, 29, 31, 32, 33, 35, 36, 37, 38, 40];
   
-  constructor(private http: HttpClient, private storage: Storage, private router: Router, private route: ActivatedRoute, private alertcontroller: AlertController, private requests: RequestsService) { }
+  constructor(private http: HttpClient, private storage: Storage, private router: Router, private route: ActivatedRoute, private alertcontroller: AlertController, private requests: RequestsService, private ws: WebsocketService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -32,18 +35,25 @@ export class DetailsComponent implements OnInit {
         this.requests.getPin(this.id).then(pin => {
           this.pin = pin;
           this.pincopy = JSON.parse(JSON.stringify(pin));
-        })
+          this.connectws();
+        });
       });
     });
   }
 
   save(attr, val){
+    this.ws.close();
     console.log(this.pin);
+    //this.wsobs.unsubscribe();
+    console.log(this.pin.state);
     this.requests.save(this.url, this.id, attr, val, this.pin, this.pincopy).then(pin => {
       this.pin = pin;
+      console.log(this.pin.state);
+      this.pincopy = JSON.parse(JSON.stringify(pin));
+      this.connectws();
     }).catch(err => {
       throw err;
-    })
+    });
   }
 
   setpin(state){
@@ -53,6 +63,14 @@ export class DetailsComponent implements OnInit {
   }
 
   connectws(){
-    
+    console.log(this.pin.pin);
+    this.wsobs = this.ws.connect(this.requests.url, this.pin.pin).subscribe(val => {
+      console.log(val.data);
+      this.pin.state = parseInt(val.data);
+    });
+  }
+
+  back(){
+    this.ws.close(); this.router.navigate(['']);
   }
 }

@@ -13,11 +13,12 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { OverviewComponent } from './overview/overview.component';
 import { DetailsComponent } from './details/details.component';
 import { FormsModule } from '@angular/forms';
-import { NewComponent } from './new/new.component';
+import { NewPinComponent } from './newpin/newpin.component';
 import { SettingsComponent } from './settings/settings.component';
+import { NewWSComponent } from './new-ws/new-ws.component';
 
 @NgModule({
-  declarations: [AppComponent, OverviewComponent, DetailsComponent, NewComponent, SettingsComponent],
+  declarations: [AppComponent, OverviewComponent, DetailsComponent, NewPinComponent, SettingsComponent, NewWSComponent],
   entryComponents: [],
   imports: [IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot(), BrowserModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
