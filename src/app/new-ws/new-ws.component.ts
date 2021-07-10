@@ -13,8 +13,11 @@ import { RequestsService } from '../requests.service';
 export class NewWSComponent implements OnInit, AfterViewInit {
   @ViewChild("slides") slides: IonSlides;
   url: string;
+  interval: number;
   devices: any[];
-  port: any;
+  device: any;
+  port: number;
+  response: any = { msg: "", method: "" };
 
   constructor(private http: HttpClient, private storage: Storage, private requests: RequestsService) { }
 
@@ -34,11 +37,10 @@ export class NewWSComponent implements OnInit, AfterViewInit {
 
   selectdev(device){
     this.slides.lockSwipes(false);
-    console.log(device);
+    this.device = device;
     this.slides.slideNext();
     this.slides.lockSwipes(true);
     this.slides.updateAutoHeight();
-    window.scrollTo(0, 0);
   }
 
   numbervalidation(event){
@@ -48,5 +50,22 @@ export class NewWSComponent implements OnInit, AfterViewInit {
     if(!pattern.test(inputchar)){
       event.preventDefault();
     }
+  }
+
+  test(){
+    console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.port });
+    this.http.post("http://" + this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.port }).subscribe((res: any) => {
+      console.log(res);
+      if(res.msg){
+        this.response.msg = res.msg;
+        this.response.method = res.method;
+        this.slides.lockSwipes(false);
+        this.slides.slideNext();
+        this.slides.lockSwipes(true);
+      }
+      else if(res.error){
+
+      }
+    });
   }
 }

@@ -32,11 +32,31 @@
           <ion-progress-bar type="indeterminate"></ion-progress-bar>
         </div>
       </ion-slide>
-      <ion-slide>
-        <ion-item style="width: 100%; text-align: right;">
-          <ion-label>Port: </ion-label>
+      <ion-slide style="display: inline-block !important;">
+        <ion-item style="width: 100%;">
+          <ion-label position="floating">Port: </ion-label>
           <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="port" #ctrl="ngModel" placeholder="1 - 65535"></ion-input>
         </ion-item>
+        <ion-item style="width: 100%;">
+          <ion-label position="floating">Request Interval (minutes): </ion-label>
+          <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="interval" #ctrl="ngModel" style="width: 50% !important"></ion-input>
+        </ion-item>
+        <div style="text-align: right; margin-top: 1%;">
+          <ion-button (click)="test()">Next</ion-button>
+        </div>
+      </ion-slide>
+      <ion-slide style="display: inline-block !important; align-items: flex-start;">
+        <ion-item style="width: 100%;">
+          <ion-label>Response: </ion-label>
+          <span>{{ response.msg }}</span>
+        </ion-item>
+        <ion-item style="width: 100%">
+          <ion-label>Method: </ion-label>
+          <span>{{ response.method }}</span>
+        </ion-item>
+        <div style="text-align: right; margin-top: 1%;">
+          <ion-button (click)="test()" color="success">Save</ion-button>
+        </div>
       </ion-slide>
     </ion-slides>
 </ion-content>
