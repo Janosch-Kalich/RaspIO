@@ -1,0 +1,41 @@
+<ion-content>
+  <ion-toolbar>
+    <ion-icon name="arrow-back-sharp" style="margin-left: 1%;" size="large" (click)="back()" slot="start"></ion-icon>
+    <ion-title>Details</ion-title>
+    <!--<ion-button color="danger" slot="end" style="margin: 0.5%;" (click)="requests.delete(id)">Delete</ion-button>-->
+  </ion-toolbar>
+  <!--<ng-container *ngIf="ws">
+    <ion-item>
+      <ion-input [(ngModel)]="pin.name" #ctrl="ngModel" (change)="save('name', pin.name)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="pin.desc" #ctrl="ngModel" (change)="save('desc', pin.desc)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Physical Pin (<a href="https://pinout.xyz">Pinout</a>): </ion-label>
+      <ion-select [(ngModel)]="pin.pin" #ctrl="ngModel"(ionChange)="save('pin', pin.pin)">
+        <ion-select-option *ngFor="let usablepin of pins" [value]="usablepin">Pin {{ usablepin }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Type: </ion-label>
+      <ion-select [(ngModel)]="pin.type" #ctrl="ngModel" (ionChange)="save('type', pin.type)">
+        <ion-select-option value="out">Output</ion-select-option>
+        <ion-select-option value="in">Input</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="pin.type == 'out'">
+      <ion-label>Default: </ion-label>
+      <ion-select [(ngModel)]="pin.default" #ctrl="ngModel" (ionChange)="save('default', pin.default)">
+        <ion-select-option [value]=1>On</ion-select-option>
+        <ion-select-option [value]=0>Off</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div style="display: flex; justify-content: center;">
+      <ion-button (click)="setpin(pin.state == 0 ? 1 : 0)" [color]="pin.state == 0 ? 'success' : 'danger'" style="position: absolute; width: 99%; height: 20%; font-size: xx-large;" *ngIf="pin.type == 'out'">Turn {{ pin.state == 0 ? "On" : "Off" }}</ion-button>
+    </div>
+    <div style="width: 100%; height: 20%; border-radius: 8px; justify-content: center; align-items: center; display: flex; font-size: xx-large;" *ngIf="pin.type == 'in'" [style]="pin.state == 0 ? 'background-color: var(--ion-color-danger)' : 'background-color: var(--ion-color-success)'">
+      {{ pin.state == 0 ? "Off" : "On" }}
+    </div>
+  </ng-containe-->
+</ion-content>

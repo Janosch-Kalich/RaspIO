@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { DetailsComponent } from './details/details.component';
+import { PinDetailsComponent } from './pindetails/pindetails.component';
 import { NewPinComponent } from './newpin/newpin.component';
 import { OverviewComponent } from './overview/overview.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NewWSComponent } from './new-ws/new-ws.component';
+import { WSDetailsComponent } from './wsdetails/wsdetails.component';
 
 const routes: Routes = [
   {
@@ -12,9 +13,9 @@ const routes: Routes = [
     component: OverviewComponent
   },
   {
-    path: 'details',
+    path: 'pindetails',
     data: ['id'],
-    component: DetailsComponent
+    component: PinDetailsComponent
   },
   {
     path: 'newpin',
@@ -29,10 +30,15 @@ const routes: Routes = [
     component: NewWSComponent
   },
   {
+    path: 'wsdetails',
+    data: ['id'],
+    component: WSDetailsComponent
+  },
+  {
     path: '',
     redirectTo: 'overview',
     pathMatch: 'full'
-  },
+  }
 ];
 
 @NgModule({

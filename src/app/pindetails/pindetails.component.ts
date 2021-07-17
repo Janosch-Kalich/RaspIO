@@ -10,12 +10,12 @@ import { WebsocketService } from '../websocket.service';
 import { Observable, Subject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss'],
+  selector: 'app-pindetails',
+  templateUrl: './pindetails.component.html',
+  styleUrls: ['./pindetails.component.scss'],
 })
 
-export class DetailsComponent implements OnInit {
+export class PinDetailsComponent implements OnInit {
   //pin: any = { "name": "", "pin": "", "desc": "", "default": 0, "type": "out" };
   pin: any;
   pincopy: any;
@@ -32,6 +32,7 @@ export class DetailsComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.id = params["id"];
       this.requests.storageinit().then(url => {
+        this.url = this.requests.url = url
         this.requests.getPin(this.id).then(pin => {
           this.pin = pin;
           this.pincopy = JSON.parse(JSON.stringify(pin));
@@ -64,13 +65,14 @@ export class DetailsComponent implements OnInit {
 
   connectws(){
     console.log(this.pin.pin);
-    this.wsobs = this.ws.connect(this.requests.url, this.pin.pin).subscribe(val => {
+    this.wsobs = this.ws.connect(this.requests.url, { "pin": this.pin.pin.toString(), "action": "get", "type": "pin" }).subscribe(val => {
       console.log(val.data);
       this.pin.state = parseInt(val.data);
     });
   }
 
   back(){
-    this.ws.close(); this.router.navigate(['']);
+    this.ws.close();
+    this.router.navigate(['']);
   }
 }

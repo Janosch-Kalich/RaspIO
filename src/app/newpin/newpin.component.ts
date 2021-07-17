@@ -52,7 +52,7 @@ export class NewPinComponent implements OnInit {
       console.log(this.pin);
       this.http.post("http://" + this.url + "/add", this.pin).subscribe(res => {
         console.log(res);
-        if(res["id"]) this.router.navigate(["details"], { queryParams: { id: res["id"] } });
+        if(res["id"]) this.router.navigate(["pindetails"], { queryParams: { id: res["id"] } });
       })
     }
   }

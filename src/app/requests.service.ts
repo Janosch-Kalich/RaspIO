@@ -47,7 +47,11 @@ export class RequestsService implements OnInit {
     return await this.http.post("http://" + this.url + "/getpin", { "id": id }).toPromise();
   }
 
-  public async getPins(){
+  public async getWS(id){
+    return await this.http.post("http://" + this.url + "/getws", { "id": id}).toPromise();
+  }
+
+  public async getAll(){
     return await this.http.post("http://" + this.url, {}).toPromise();
   }
 

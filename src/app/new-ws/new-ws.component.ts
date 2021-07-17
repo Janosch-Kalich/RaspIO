@@ -17,6 +17,7 @@ export class NewWSComponent implements OnInit, AfterViewInit {
   devices: any[];
   device: any;
   port: number;
+  pref: string = "Hostname";
   response: any = { msg: "", method: "" };
 
   constructor(private http: HttpClient, private storage: Storage, private requests: RequestsService) { }
@@ -53,7 +54,7 @@ export class NewWSComponent implements OnInit, AfterViewInit {
   }
 
   test(){
-    console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.port });
+    console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.port, "pref": this.pref });
     this.http.post("http://" + this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.port }).subscribe((res: any) => {
       console.log(res);
       if(res.msg){

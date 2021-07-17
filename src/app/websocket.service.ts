@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as Rx from 'rxjs';
+import { Buffer } from 'buffer';
 
 @Injectable({
   providedIn: 'root'
@@ -9,23 +10,23 @@ export class WebsocketService{
   private subject: Rx.Subject<MessageEvent>;
   constructor() { }
 
-  public connect(url, pin): Rx.Subject<MessageEvent>{
-    console.log(pin);
+  public connect(url, msg): Rx.Subject<MessageEvent>{
+    console.log(msg);
     if(!this.subject){
-      this.subject = this.create(url, pin);
+      this.subject = this.create(url, msg);
       console.log("Connected " + url);
     }
     return this.subject;
   }
 
-  private create(url, pin): Rx.Subject<MessageEvent>{
+  private create(url, msg): Rx.Subject<MessageEvent>{
     this.ws = new WebSocket("ws://" + url);
 
     console.log("BBB");
 
     let observable = new Rx.Observable((obs: Rx.Observer<MessageEvent>) => {
       this.ws.onopen = () => {
-        this.ws.send(pin.toString());
+        this.ws.send(Buffer.from(JSON.stringify(msg)));
       }
       this.ws.onmessage = obs.next.bind(obs);
       this.ws.onerror = obs.error.bind(obs);
@@ -37,7 +38,7 @@ export class WebsocketService{
       next: (data: Object) => {
       },
       error: (err: Object) => {
-        setTimeout(() => { this.create(url, pin) }, 5000);
+        setTimeout(() => { this.create(url, msg) }, 5000);
         throw err;
       },
       complete: () => {
@@ -51,7 +52,7 @@ export class WebsocketService{
   }
   
   close(){
-    this.ws.send("STOP");
+    this.ws.send(Buffer.from(JSON.stringify({ "action": "stop" })));
     this.ws.close();
     this.subject = null;
   }

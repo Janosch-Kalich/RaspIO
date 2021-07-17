@@ -33,6 +33,11 @@ ion-icon:hover{
     cursor: pointer;
 }
 
+span.alert-button-inner{
+    display: inline-block !important;
+    text-align: center !important;
+}
+
 .AlertButton{
     display: inline-block !important;
     background-color: var(--ion-color-primary) !important;
@@ -48,9 +53,4 @@ ion-icon:hover{
     margin: 2% !important;
     margin-left: 3% !important;
     margin-right: 3% !important;
-}
-
-.alert-button-inner{
-    display: inline-block !important;
-    text-align: center !important;
 }

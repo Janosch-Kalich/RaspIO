@@ -4,7 +4,20 @@
     <ion-button color="success" slot="secondary" style="margin-right: 1%;" (click)="new()">New</ion-button>
     <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
-  <ion-list *ngFor="let id of idarray">
-    <ion-item (click)="details(id)">{{ pins.pins[id].name }}</ion-item>
-  </ion-list>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Pins</ion-card-title>
+    </ion-card-header>
+    <ion-list *ngFor="let id of pinidarray">
+      <ion-item (click)="details('pindetails', id)">{{ pins.pins[id].name }}</ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Websockets</ion-card-title>
+    </ion-card-header>
+    <ion-list *ngFor="let id of wsidarray">
+      <ion-item (click)="details('wsdetails', id)">{{ websockets.websockets[id].name }}</ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

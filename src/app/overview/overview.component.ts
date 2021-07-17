@@ -14,7 +14,9 @@ import { RequestsService } from '../requests.service';
 export class OverviewComponent implements OnInit {
   title: string = "Overview";
   pins: any;
-  idarray: any[] = [];
+  websockets: any;
+  pinidarray: any[] = [];
+  wsidarray: any[] = [];
 
   constructor(private http: HttpClient, private storage: Storage, private alertcontroller: AlertController, private router: Router, private requests: RequestsService) {}
 
@@ -26,10 +28,14 @@ export class OverviewComponent implements OnInit {
           console.log(data.url);
           this.storage.set("url", data.url).then(() => {
             this.requests.url = data.url;
-            this.requests.getPins().then(pins => {
-              this.pins = pins;
-              for(let pin in pins["pins"]){
-                this.idarray.push(pin);
+            this.requests.getAll().then(obj => {
+              this.pins = obj["pins"];
+              this.websockets = obj["ws"];
+              for(let pin in this.pins["pins"]){
+                this.pinidarray.push(pin);
+              }
+              for(let ws in this.websockets["websockets"]){
+                this.wsidarray.push(ws);
               }
             }).catch(err => {
               this.requests.connectionerror();
@@ -38,10 +44,14 @@ export class OverviewComponent implements OnInit {
         });
       }
       else {
-        this.requests.getPins().then(pins => {
-          this.pins = pins;
-          for(let pin in pins["pins"]){
-            this.idarray.push(pin);
+        this.requests.getAll().then(obj => {
+          this.pins = obj["pins"];
+          this.websockets = obj["ws"];
+          for(let pin in this.pins["pins"]){
+            this.pinidarray.push(pin);
+          }
+          for(let ws in this.websockets["websockets"]){
+            this.wsidarray.push(ws);
           }
         }).catch(err => {
           this.requests.connectionerror();
@@ -53,13 +63,14 @@ export class OverviewComponent implements OnInit {
       //this.idarray = res["idarray"];
   }
 
-  details(id){
-    this.router.navigate(["details"], { queryParams: { id: id } });
+  details(path, id){
+    this.router.navigate([path], { queryParams: { id: id } });
   }
 
   new(){
     this.alertcontroller.create({
       header: "New Item",
+      cssClass: "AlertContainer",
       buttons: [
         {
           text: "Pin",
