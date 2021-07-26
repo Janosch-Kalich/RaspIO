@@ -47,7 +47,7 @@ export class PinDetailsComponent implements OnInit {
     console.log(this.pin);
     //this.wsobs.unsubscribe();
     console.log(this.pin.state);
-    this.requests.save(this.url, this.id, attr, val, this.pin, this.pincopy).then(pin => {
+    this.requests.savepin(this.url, this.id, attr, val, this.pin, this.pincopy).then(pin => {
       this.pin = pin;
       console.log(this.pin.state);
       this.pincopy = JSON.parse(JSON.stringify(pin));

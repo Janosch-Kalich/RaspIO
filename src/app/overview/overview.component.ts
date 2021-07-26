@@ -20,7 +20,7 @@ export class OverviewComponent implements OnInit {
 
   constructor(private http: HttpClient, private storage: Storage, private alertcontroller: AlertController, private router: Router, private requests: RequestsService) {}
 
-  ngOnInit() {
+  init(){
     this.requests.storageinit().then(url => {
       this.requests.url = url;
       if(!url){
@@ -47,10 +47,12 @@ export class OverviewComponent implements OnInit {
         this.requests.getAll().then(obj => {
           this.pins = obj["pins"];
           this.websockets = obj["ws"];
+          console.log(this.websockets);
           for(let pin in this.pins["pins"]){
             this.pinidarray.push(pin);
           }
           for(let ws in this.websockets["websockets"]){
+            console.log(ws);
             this.wsidarray.push(ws);
           }
         }).catch(err => {
@@ -58,6 +60,19 @@ export class OverviewComponent implements OnInit {
         })
       }
     });
+  }
+
+  refresh(e){
+    this.pins = {};
+    this.websockets = {};
+    this.pinidarray = [];
+    this.wsidarray = [];
+    this.init();
+    setTimeout(() => { e.target.complete(); }, 500);
+  }
+
+  ngOnInit() {
+    this.init();
 
       //this.pins = res["pins"];
       //this.idarray = res["idarray"];

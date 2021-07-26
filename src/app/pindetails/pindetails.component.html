@@ -16,20 +16,20 @@
       <ion-input [(ngModel)]="pin.desc" #ctrl="ngModel" (change)="save('desc', pin.desc)"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Physical Pin (<a href="https://pinout.xyz">Pinout</a>): </ion-label>
+      <ion-label position="floating">Physical Pin (<a href="https://pinout.xyz">Pinout</a>): </ion-label>
       <ion-select [(ngModel)]="pin.pin" #ctrl="ngModel"(ionChange)="save('pin', pin.pin)">
         <ion-select-option *ngFor="let usablepin of pins" [value]="usablepin">Pin {{ usablepin }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Type: </ion-label>
+      <ion-label position="floating">Type: </ion-label>
       <ion-select [(ngModel)]="pin.type" #ctrl="ngModel" (ionChange)="save('type', pin.type)">
         <ion-select-option value="out">Output</ion-select-option>
         <ion-select-option value="in">Input</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="pin.type == 'out'">
-      <ion-label>Default: </ion-label>
+      <ion-label position="floating">Default: </ion-label>
       <ion-select [(ngModel)]="pin.default" #ctrl="ngModel" (ionChange)="save('default', pin.default)">
         <ion-select-option [value]=1>On</ion-select-option>
         <ion-select-option [value]=0>Off</ion-select-option>

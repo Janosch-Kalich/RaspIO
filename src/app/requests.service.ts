@@ -79,13 +79,13 @@ export class RequestsService implements OnInit {
     return { "idarray": idarray, "pins": pins };
   }
   
-  public async save(url, id, attr, val, pin, pincopy){
+  public async savepin(url, id, attr, val, pin, pincopy){
     console.log(pincopy[attr]);
     if(val || attr == "desc" || attr == "default"){
       pincopy[attr] = val;
       let data = { id: id, props: {  }};
       data.props[attr] = val;
-      this.http.post("http://" + this.url + "/set", data).subscribe(res => {
+      this.http.post("http://" + this.url + "/setpin", data).subscribe(res => {
         return res;
       });
     }

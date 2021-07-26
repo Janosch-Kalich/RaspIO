@@ -16,9 +16,10 @@ import { FormsModule } from '@angular/forms';
 import { NewPinComponent } from './newpin/newpin.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NewWSComponent } from './new-ws/new-ws.component';
+import { WSDetailsComponent } from './wsdetails/wsdetails.component';
 
 @NgModule({
-  declarations: [AppComponent, OverviewComponent, PinDetailsComponent, NewPinComponent, SettingsComponent, NewWSComponent],
+  declarations: [AppComponent, OverviewComponent, PinDetailsComponent, NewPinComponent, SettingsComponent, NewWSComponent, WSDetailsComponent],
   entryComponents: [],
   imports: [IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot(), BrowserModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
