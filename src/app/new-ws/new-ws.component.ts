@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonSlides } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { RequestsService } from '../requests.service';
@@ -13,14 +14,12 @@ import { RequestsService } from '../requests.service';
 export class NewWSComponent implements OnInit, AfterViewInit {
   @ViewChild("slides") slides: IonSlides;
   url: string;
-  interval: number;
   devices: any[];
   device: any;
-  port: number;
-  pref: string = "Hostname";
+  ws: any = {};
   response: any = { msg: "", method: "" };
 
-  constructor(private http: HttpClient, private storage: Storage, private requests: RequestsService) { }
+  constructor(private http: HttpClient, private storage: Storage, private requests: RequestsService, private router: Router) { }
 
   ngOnInit() {
     this.requests.storageinit().then((url) => {
@@ -54,8 +53,8 @@ export class NewWSComponent implements OnInit, AfterViewInit {
   }
 
   test(){
-    console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.port, "pref": this.pref });
-    this.http.post("http://" + this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.port }).subscribe((res: any) => {
+    console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.ws.port, "pref": this.ws.pref });
+    this.http.post("http://" + this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.ws.port }).subscribe((res: any) => {
       console.log(res);
       if(res.msg){
         this.response.msg = res.msg;
@@ -68,5 +67,17 @@ export class NewWSComponent implements OnInit, AfterViewInit {
 
       }
     });
+  }
+
+  add(){
+    this.http.post("http://" + this.url + "/addws", {
+      "name": this.ws.name,  
+      "hostname": this.device.name,
+      "ip": this.device.ip,
+      "port": this.ws.port,
+      "pref": this.ws.pref
+    }).subscribe(res => {
+        this.router.navigate(["wsdetails"], { queryParams: { id: res["id"]} });
+    })
   }
 }

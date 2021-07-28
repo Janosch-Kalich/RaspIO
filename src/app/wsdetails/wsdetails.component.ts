@@ -11,11 +11,13 @@ import { ToastController } from '@ionic/angular';
   templateUrl: './wsdetails.component.html',
   styleUrls: ['./wsdetails.component.scss'],
 })
+
 export class WSDetailsComponent implements OnInit {
   wsdetails: any = { readyState: 0 };
   wssub: Subscription;
   id: string;
   prevrs: number;
+  valueidarray: any[] = [];
 
   constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController) { }
 
@@ -25,24 +27,33 @@ export class WSDetailsComponent implements OnInit {
       this.requests.storageinit().then(url => {
         this.requests.url = url;
         this.requests.getWS(params["id"]).then(ws => {
-          console.log(ws);
           this.wsdetails = ws;
+          if(!this.wsdetails.data) this.wsdetails.data = {};
+          this.valueidarray = [];
+          for(let valueid in this.wsdetails.data){
+            this.valueidarray.push(valueid);
+            if(!this.wsdetails.data[valueid]) this.wsdetails.data[valueid] = {};
+          }
+          console.log(ws);
+          console.log(this.valueidarray);
           this.connectws(url, this.id);
         });
       });
     });
   }
 
-  save(attr, val){
+  save(attr, val, extras?){
     this.wss.close();
     //this.wsobs.unsubscribe();
     let data = { id: this.id, props: {} };
+    if(extras) data["extras"] = extras;
     data.props[attr] = val;
     this.http.post("http://" + this.requests.url + "/setws", data).subscribe(res => {
-      this.wsdetails = res;
-      this.wssub = this.wss.connect(this.requests.url, { "id": this.id, "action": "get", "type": "ws" }).subscribe(val => {
-        console.log(val);
-      });
+      for(let attrs in res){
+        if(attrs != "values") this.wsdetails[attrs] = res[attrs];
+      }
+      console.log(this.wsdetails);
+      this.connectws(this.requests.url, this.id);
     });
   }
 
@@ -53,8 +64,8 @@ export class WSDetailsComponent implements OnInit {
 
   connectws(url, id){
     this.wssub = this.wss.connect(url, { "id": id, "action": "get", "type": "ws" }).subscribe(val => {
-      console.log(val.data);
       let data = JSON.parse(val.data);
+      console.log(data);
       if(this.wsdetails["readyState"] != data.wsc["_readyState"]){
         switch(data.wsc["_readyState"] ){
           case 0:
@@ -83,8 +94,12 @@ export class WSDetailsComponent implements OnInit {
             break;
         }
       }
-      this.wsdetails.value = data["value"];
+      this.wsdetails.values = data["values"];
       this.wsdetails.readyState = data.wsc["_readyState"];
+      this.wsdetails["data"] = data["data"];
+      for(let elem in this.wsdetails["data"]){
+        if(!this.valueidarray.includes(elem)) this.valueidarray.push(elem);
+      }
     });
   }
 
@@ -93,6 +108,29 @@ export class WSDetailsComponent implements OnInit {
     this.connectws(this.requests.url, this.id);
     this.http.post("http://" + this.requests.url + "/connectws", { id: this.id }).subscribe(res => {
       console.log(res);
+    });
+  }
+
+  deletewsdata(wsid, valueid){
+    this.http.post("http://" + this.requests.url + "/deletewsdata", { wsid: wsid, valueid: valueid }).subscribe(res => {
+      delete this.wsdetails.data[valueid];
+      this.valueidarray.splice(this.valueidarray.indexOf(valueid));
+      console.log(res);
+    });
+  }
+
+  savedata(valueid, attr, val, extras?){
+    this.wss.close();
+    //this.wsobs.unsubscribe();
+    let data = { id: this.id, valueid: valueid, props: {} };
+    if(extras) data["extras"] = extras;
+    data.props[attr] = val;
+    this.http.post("http://" + this.requests.url + "/setwsdata", data).subscribe(res => {
+      for(let attrs in res){
+        if(attrs != "values") this.wsdetails[attrs] = res[attrs];
+      }
+      console.log(this.wsdetails);
+      this.connectws(this.requests.url, this.id);
     });
   }
 }

@@ -33,17 +33,21 @@
         </div>
       </ion-slide>
       <ion-slide style="display: inline-block !important;">
-        <ion-item style="width: 100%;">
-          <ion-label position="floating">Port: </ion-label>
-          <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="port" #ctrl="ngModel" placeholder="1 - 65535"></ion-input>
+        <ion-item>
+          <ion-label position="floating">Name (required): </ion-label>
+          <ion-input [(ngModel)]="ws.name" #ctrl="ngModel"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Description: </ion-label>
+          <ion-input [(ngModel)]="ws.desc" #ctrl="ngModel"></ion-input>
         </ion-item>
         <ion-item style="width: 100%;">
-          <ion-label position="floating">Request Interval (minutes): </ion-label>
-          <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="interval" #ctrl="ngModel"></ion-input>
+          <ion-label position="floating">Port: </ion-label>
+          <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="ws.port" #ctrl="ngModel" placeholder="1 - 65535"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label>Preferred connection method</ion-label>
-          <ion-select [(ngModel)]="pref" #ctrl="ngModel">
+          <ion-select [(ngModel)]="ws.pref" #ctrl="ngModel">
             <ion-select-option value="Hostname">Hostname</ion-select-option>
             <ion-select-option value="IP">IP</ion-select-option>
           </ion-select>
@@ -62,7 +66,7 @@
           <span>{{ response.method }}</span>
         </ion-item>
         <div style="text-align: right; margin-top: 1%;">
-          <ion-button (click)="test()" color="success">Save</ion-button>
+          <ion-button (click)="add()" color="success">Save</ion-button>
         </div>
       </ion-slide>
     </ion-slides>

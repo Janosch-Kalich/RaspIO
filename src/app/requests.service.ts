@@ -107,7 +107,7 @@ export class RequestsService implements OnInit {
   }
 
   public async setpin(id, pin, state){
-    return await this.http.post("http://" + this.url + "/setpin", { id: id, state: state }).toPromise();
+    return await this.http.post("http://" + this.url + "/setpinstate", { id: id, state: state }).toPromise();
   }
 
   delete(id){

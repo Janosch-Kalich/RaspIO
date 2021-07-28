@@ -60,7 +60,7 @@ export class PinDetailsComponent implements OnInit {
   setpin(state){
     this.requests.setpin(this.id, this.pin, state).then(pin => {
       this.pin = pin;
-    })
+    });
   }
 
   connectws(){
@@ -73,6 +73,6 @@ export class PinDetailsComponent implements OnInit {
 
   back(){
     this.ws.close();
-    this.router.navigate(['']);
+    this.router.navigateByUrl('/');
   }
 }
