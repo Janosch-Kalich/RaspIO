@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../websocket.service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestsService } from '../requests.service';
 import { Subscription } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { Animation, AnimationController, IonSlide, IonSlides, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-wsdetails',
@@ -12,14 +12,18 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./wsdetails.component.scss'],
 })
 
-export class WSDetailsComponent implements OnInit {
+export class WSDetailsComponent implements OnInit{
+  @ViewChild("slides") slides: IonSlides;
+
+  outputidarray: any[] = ["snjsfkafajfpoak", "joebjkwehsjrbj"];
+  outputs: any = { snjsfkafajfpoak: { name: "AAA", data: { type: 3, id: "0", value: "AA" }, hidden: true }, joebjkwehsjrbj: { name: "BBB", data: { type: 2, id: "1", value: "BB" }, hidden: true } };
   wsdetails: any = { readyState: 0 };
   wssub: Subscription;
   id: string;
   prevrs: number;
   valueidarray: any[] = [];
 
-  constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController) { }
+  constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController, private animationcontroller: AnimationController) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -41,9 +45,14 @@ export class WSDetailsComponent implements OnInit {
       });
     });
   }
+  
+  toggleoutputdisplay(i){
+    console.log(i);
+    this.outputs[i].hidden = !this.outputs[i].hidden;
+  }
 
   save(attr, val, extras?){
-    this.wss.close();
+    //this.wss.close();
     //this.wsobs.unsubscribe();
     let data = { id: this.id, props: {} };
     if(extras) data["extras"] = extras;
@@ -53,7 +62,7 @@ export class WSDetailsComponent implements OnInit {
         if(attrs != "values") this.wsdetails[attrs] = res[attrs];
       }
       console.log(this.wsdetails);
-      this.connectws(this.requests.url, this.id);
+      //this.connectws(this.requests.url, this.id);
     });
   }
 
@@ -132,5 +141,10 @@ export class WSDetailsComponent implements OnInit {
       console.log(this.wsdetails);
       this.connectws(this.requests.url, this.id);
     });
+  }
+
+  opentab(i){
+    console.log(i);
+    this.slides.slideTo(i);
   }
 }

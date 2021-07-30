@@ -4,80 +4,131 @@
   <ion-title>Details</ion-title>
   <ion-button color="primary" *ngIf="wsdetails.readyState != 1" (click)="connectextws()" slot="end">Connect</ion-button>
 </ion-toolbar>
-<ion-content>
+<ion-content style="height: min-content !important;">
   <ng-container *ngIf="wsdetails">
-    <ion-slides style="min-height: 100%;" pager="true">
+    <ion-slides style="min-height: 100%;" #slides>
       <ion-slide style="min-height: 100%;">
-      <ion-card style="width: 95%;">
-        <ion-card-header>
-          <ion-card-title>
-            <input [(ngModel)]="wsdetails.name" #ctrl="ngModel" (change)="save('name', wsdetails.name)" style="border: none; background-color: var(--ion-item-background); width: 100%;"/>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-item>
-          <ion-input [(ngModel)]="wsdetails.desc" #ctrl="ngModel" (change)="save('desc', wsdetails.desc)"></ion-input>
-        </ion-item>
-        <ion-item>
-        <ion-label position="floating">Preferred connection method</ion-label>
-        <ion-select [(ngModel)]="wsdetails.pref" #ctrl="ngModel" (ionChange)="save('pref', wsdetails.pref)">
-          <ion-select-option value="Hostname">Hostname</ion-select-option>
-          <ion-select-option value="IP">IP</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Hostname:</ion-label>
-        <ion-input [(ngModel)]="wsdetails.hostname" #ctrl="ngModel" (change)="save('hostname', wsdetails.hostname)"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">IP:</ion-label>
-        <ion-input [(ngModel)]="wsdetails.ip" #ctrl="ngModel" (change)="save('ip', wsdetails.ip)"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Port:</ion-label>
-        <ion-input [(ngModel)]="wsdetails.port" #ctrl="ngModel" (change)="save('port', wsdetails.port)"></ion-input>
-      </ion-item>
-    </ion-card>
-  </ion-slide>
-  <ion-slide style="min-height: 100% !important; display: block !important;">
-    <ng-container *ngFor="let valueid of valueidarray" style="display: inline; text-align: center;">
-      <ion-card style="width: 95% !important; min-width: 95%; align-self: center; margin-left: auto; margin-right: auto;">
-        <ion-card-header>
-          <ion-card-title>
-            <input [(ngModel)]="wsdetails.data[valueid].name" #ctrl="ngModel" (change)="savedata(valueid, 'name', wsdetails.data[valueid].name)" style="border: none; background-color: var(--ion-item-background); width: 100%;"/>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-item> 
-          <div style="padding: 0% !important; display: inline-block !important">
-            <ion-label class="floating">ID:</ion-label>
-            <ion-text style="text-align: left; vertical-align: bottom;">{{ valueid }}</ion-text>
+        <ion-card style="width: 95%;">
+          <ion-card-header>
+            <ion-card-title>
+              <input [(ngModel)]="wsdetails.name" #ctrl="ngModel" (change)="save('name', wsdetails.name)" style="border: none; background-color: var(--ion-item-background); width: 100%;"/>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-item>
+            <ion-input [(ngModel)]="wsdetails.desc" #ctrl="ngModel" (change)="save('desc', wsdetails.desc)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Preferred connection method</ion-label>
+            <ion-select [(ngModel)]="wsdetails.pref" #ctrl="ngModel" (ionChange)="save('pref', wsdetails.pref)">
+              <ion-select-option value="Hostname">Hostname</ion-select-option>
+              <ion-select-option value="IP">IP</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Hostname:</ion-label>
+            <ion-input [(ngModel)]="wsdetails.hostname" #ctrl="ngModel" (change)="save('hostname', wsdetails.hostname)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">IP:</ion-label>
+            <ion-input [(ngModel)]="wsdetails.ip" #ctrl="ngModel" (change)="save('ip', wsdetails.ip)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Port:</ion-label>
+            <ion-input [(ngModel)]="wsdetails.port" #ctrl="ngModel" (change)="save('port', wsdetails.port)"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-slide>
+      <ion-slide style="height: min-content !important;display: block !important;">
+        <ng-container *ngFor="let valueid of valueidarray" style="display: inline; text-align: center;">
+          <ion-card style="width: 95% !important; min-width: 95%; align-self: center; margin-left: auto; margin-right: auto;">
+            <ion-card-header>
+              <ion-card-title>
+                <input [(ngModel)]="wsdetails.data[valueid].name" #ctrl="ngModel" (change)="savedata(valueid, 'name', wsdetails.data[valueid].name)" style="border: none; background-color: var(--ion-item-background); width: 100%;"/>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-item> 
+              <div style="padding: 0% !important; display: inline-block !important">
+                <ion-label class="floating">ID:</ion-label>
+                <ion-text style="text-align: left; vertical-align: bottom;">{{ valueid }}</ion-text>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Value Type:</ion-label>
+              <ion-select [(ngModel)]="wsdetails.data[valueid].type" #ctrl="ngModel" (ionChange)="save('valuetype', wsdetails.data[valueid].type, {'name': valueid})">
+                <ion-select-option value="number/text">
+                  Number/Text
+                </ion-select-option>
+                <ion-select-option value="boolean">
+                  Boolean as on/off (true/false/1/0)
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item *ngIf="wsdetails.readyState == 1 && wsdetails.values[valueid]">
+              <div style="padding: 0% !important; display: inline-box !important">
+                <ion-label class="floating">Raw Value:</ion-label>
+                <ion-text style="text-align: left; vertical-align: bottom;">{{ wsdetails.values[valueid] }}</ion-text>
+              </div>
+            </ion-item>
+            <div style="width: 98%; max-width: 95%; height: 20%; border-radius: 8px; justify-content: center; align-items: center; display: flex-block; font-size: x-large; padding: 1%; margin-top: 1%; margin-bottom: 1%; margin-left: auto; margin-right: auto; text-align: center;" *ngIf="wsdetails.data[valueid].type == 'boolean' && wsdetails.readyState == 1 && wsdetails.values[valueid]" [style]="wsdetails.values[valueid] == 0 ? 'background-color: var(--ion-color-danger)' : 'background-color: var(--ion-color-success)'">
+              {{ wsdetails.values[valueid] == false ? "Off" : "On" }}
+            </div>
+            <div style="text-transform: none !important; width: 98%; max-width: 95%; height: 20%; border-radius: 8px; justify-content: center; align-items: center; display: flex-block; font-size: x-large; padding: 1%; margin-bottom: 1%; margin-top: 1%; margin-left: auto; margin-right: auto; text-align: center; cursor: pointer; background-color: var(--ion-color-danger)" *ngIf="!wsdetails.values[valueid]" (click)="deletewsdata(id, valueid)">
+              Delete  
+            </div>
+          </ion-card>
+        </ng-container>
+      </ion-slide>
+      <ion-slide style="height: min-content !important; display: block !important;">
+        <ng-container *ngFor="let outputid of outputidarray" style="display: inline; text-align: center;">
+        <ion-card style="width: 95% !important; min-width: 95%; align-self: center; margin-left: auto; margin-right: auto;">
+          <ion-item (click)="toggleoutputdisplay(outputid)" style="cursor: pointer;">
+            <ion-label>{{ outputs[outputid].name  }}</ion-label>
+            <ion-icon name="menu-sharp"></ion-icon>
+          </ion-item>
+          <div [hidden]="outputs[outputid].hidden">
+            <ion-item>
+              <ion-label position="floating">Type: </ion-label>
+              <ion-select [(ngModel)]="outputs[outputid].data.type" #ctrl="ngModel">
+                <ion-select-option [value]="0">
+                  Digital
+                </ion-select-option>
+                <ion-select-option [value]="1">
+                  Analog
+                </ion-select-option>
+                <ion-select-option [value]="2">
+                  Set variable
+                </ion-select-option>
+                <ion-select-option [value]="3">
+                  Execute function
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">ID / Pin:</ion-label>
+              <ion-input [(ngModel)]="outputs[outputid].data.id" #ctrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="outputs[outputid].data.type == 1 || outputs[outputid].data.type == 2">
+              <ion-label position="floating">Value:</ion-label>
+              <ion-input [(ngModel)]="outputs[outputid].data.value"></ion-input>
+            </ion-item>
           </div>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Value Type:</ion-label>
-          <ion-select [(ngModel)]="wsdetails.data[valueid].type" #ctrl="ngModel" (ionChange)="save('valuetype', wsdetails.data[valueid].type, {'name': valueid})">
-            <ion-select-option value="number/text">
-              Number/Text
-            </ion-select-option>
-            <ion-select-option value="boolean">
-              Boolean as on/off (true/false/1/0)
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item *ngIf="wsdetails.readyState == 1 && wsdetails.values[valueid]">
-          <div style="padding: 0% !important; display: inline-box !important">
-            <ion-label class="floating">Raw Value:</ion-label>
-            <ion-text style="text-align: left; vertical-align: bottom;">{{ wsdetails.values[valueid] }}</ion-text>
-          </div>
-        </ion-item>
-        <div style="width: 98%; max-width: 95%; height: 20%; border-radius: 8px; justify-content: center; align-items: center; display: flex-block; font-size: x-large; padding: 1%; margin-top: 1%; margin-bottom: 1%; margin-left: auto; margin-right: auto; text-align: center;" *ngIf="wsdetails.data[valueid].type == 'boolean' && wsdetails.readyState == 1 && wsdetails.values[valueid]" [style]="wsdetails.values[valueid] == 0 ? 'background-color: var(--ion-color-danger)' : 'background-color: var(--ion-color-success)'">
-          {{ wsdetails.values[valueid] == false ? "Off" : "On" }}
-        </div>
-        <div style="text-transform: none !important; width: 98%; max-width: 95%; height: 20%; border-radius: 8px; justify-content: center; align-items: center; display: flex-block; font-size: x-large; padding: 1%; margin-bottom: 1%; margin-top: 1%; margin-left: auto; margin-right: auto; text-align: center; cursor: pointer; background-color: var(--ion-color-danger)" *ngIf="!wsdetails.values[valueid]" (click)="deletewsdata(id, valueid)">
-          Delete  
-        </div>
-      </ion-card>
-    </ng-container>
-  </ion-slide>
-  </ion-slides>
+        </ion-card>
+      </ng-container>
+      </ion-slide>
+    </ion-slides>
   </ng-container>
 </ion-content>
+<ion-tab-bar slot="bottom">
+  <ion-tab-button (click)="opentab(0)">
+    <ion-icon name="options-sharp"></ion-icon>
+    <ion-label>General</ion-label>
+  </ion-tab-button>
+  <ion-tab-button (click)="opentab(1)">
+    <ion-icon name="cloud-download-sharp"></ion-icon>
+    <ion-label>Input</ion-label>
+  </ion-tab-button>
+  <ion-tab-button (click)="opentab(2)">
+    <ion-icon name="cloud-upload-sharp"></ion-icon>
+    <ion-label>Output</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>
