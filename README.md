@@ -40,11 +40,11 @@
 {
     "pins": {
         "[id]":{
-            "name": String,
-            "pin": Number,
-            "desc": String,
-            "type": String (in/out),
-            "default": Number (0/1)
+            "name": "String",
+            "pin": "Number",
+            "desc": "String",
+            "type": "String (in/out)",
+            "default": "Number (0/1)"
         }
     }
 }
@@ -83,25 +83,25 @@ As soon as the node.js program on the Raspberry Pi starts, it will try to connec
 {
     "websockets": {
         "[id/wsid]": {
-            "name": String,
-            "desc": String,
-            "ip": String,
-            "hostname": String,
-            "port": String,
-            "pref": String (IP / Hostname),
+            "name": "String",
+            "desc": "String",
+            "ip": "String",
+            "hostname": "String",
+            "port": "String",
+            "pref": "String (IP / Hostname)",
             "input": {
                 "[inputid]": {
-                    "name": (String),
-                    "type": (String)
+                    "name": "String",
+                    "type": "String"
                 }
             },
             "output": {
                 "[outputid]": {
-                    "name": String,
+                    "name": "String",
                     "data": {
-                        "type": Number (1-4),
-                        "id": Number as String,
-                        "value": String
+                        "type": "Number (1-4)",
+                        "id": "Number as String",
+                        "value": "String"
                     }
                 }
             }
