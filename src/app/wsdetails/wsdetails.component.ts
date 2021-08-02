@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../websocket.service';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Event, Router } from '@angular/router';
 import { RequestsService } from '../requests.service';
 import { Subscription } from 'rxjs';
 import { Animation, AnimationController, IonSlide, IonSlides, ToastController } from '@ionic/angular';
@@ -15,14 +15,14 @@ import { Animation, AnimationController, IonSlide, IonSlides, ToastController } 
 export class WSDetailsComponent implements OnInit{
   @ViewChild("slides") slides: IonSlides;
 
-  outputidarray: any[] = ["snjsfkafajfpoak", "joebjkwehsjrbj"];
-  outputs: any = { snjsfkafajfpoak: { name: "AAA", data: { type: 3, id: "0", value: "AA" }, hidden: true }, joebjkwehsjrbj: { name: "BBB", data: { type: 2, id: "1", value: "BB" }, hidden: true } };
-  wsdetails: any = { readyState: 0 };
-  wssub: Subscription;
+  hiddenoutput: any = {};
   id: string;
+  wsdetails: any = { readyState: 0 };
   prevrs: number;
-  valueidarray: any[] = [];
-
+  outputidarray: any[] = [];
+  inputidarray: any[] = [];
+  wssub: Subscription;
+  
   constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController, private animationcontroller: AnimationController) { }
 
   ngOnInit() {
@@ -32,14 +32,19 @@ export class WSDetailsComponent implements OnInit{
         this.requests.url = url;
         this.requests.getWS(params["id"]).then(ws => {
           this.wsdetails = ws;
-          if(!this.wsdetails.data) this.wsdetails.data = {};
-          this.valueidarray = [];
-          for(let valueid in this.wsdetails.data){
-            this.valueidarray.push(valueid);
-            if(!this.wsdetails.data[valueid]) this.wsdetails.data[valueid] = {};
+          if(!this.wsdetails.input) this.wsdetails.input = {};
+          this.inputidarray = [];
+          for(let valueid in this.wsdetails.input){
+            this.inputidarray.push(valueid);
+            if(!this.wsdetails.input[valueid]) this.wsdetails.input[valueid] = {};
+          }
+          for(let outputid in this.wsdetails.output){
+            this.outputidarray.push(outputid);
+            if(!this.wsdetails.output[outputid]) this.wsdetails.output[outputid] = {};
+            this.hiddenoutput[outputid] = true;
           }
           console.log(ws);
-          console.log(this.valueidarray);
+          console.log(this.inputidarray);
           this.connectws(url, this.id);
         });
       });
@@ -47,8 +52,19 @@ export class WSDetailsComponent implements OnInit{
   }
   
   toggleoutputdisplay(i){
-    console.log(i);
-    this.outputs[i].hidden = !this.outputs[i].hidden;
+    console.log(this.wsdetails.output[i].hidden);
+    this.hiddenoutput[i] = !this.hiddenoutput[i];
+  }
+
+  checknumber(id, pattern, min, max, event){
+    pattern = RegExp(pattern);
+    let value = this.wsdetails.output[id].data.value.toString() + event.key.toString();
+
+    console.log(value);
+
+    if(min > parseInt(value) || max < parseInt(value) || !pattern.test(event.key) && event.key.length == 1){
+      event.preventDefault();
+    }
   }
 
   save(attr, val, extras?){
@@ -64,6 +80,48 @@ export class WSDetailsComponent implements OnInit{
       console.log(this.wsdetails);
       //this.connectws(this.requests.url, this.id);
     });
+  }
+
+  addwsoutput(){
+    this.http.post("http://" + this.requests.url + "/addwsoutput", { wsid: this.id}).subscribe(res => {
+      this.outputidarray.push(res["id"]);
+      this.wsdetails.output[res["id"]] = res["data"];
+    });
+  }
+
+  savewsoutput(outputid, attr, val){
+    console.log(this.wsdetails.output);
+    let data = { id: this.id, outputid: outputid, props: {} };
+    if(attr == "type"){
+      this.wsdetails.output[outputid].data.value = "";
+      data.props["value"] = this.wsdetails.output[outputid].data.value;
+    }
+    data.props[attr] = val;
+    this.http.post("http://" + this.requests.url + "/setwsoutput", data).subscribe(res => {
+      for(let attrs in res){
+        if(attrs != "values") this.wsdetails[attrs] = res[attrs];
+      }
+      console.log(this.wsdetails.output);
+      console.log(this.wsdetails);
+    });
+  }
+
+  executeoutput(outputid){
+    let data = { id: this.id, data: JSON.parse(JSON.stringify(this.wsdetails.output[outputid].data)) };
+    data.data["id"] = parseInt(this.wsdetails.output[outputid].data.id);
+    if(this.wsdetails.output[outputid].data.type == 0) data.data["value"] = this.wsdetails.output[outputid].data.value == true ? "1" : "0";
+    console.log(data);
+    
+    this.http.post("http://" + this.requests.url + "/executewsoutput", data).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  checkid(event){
+    console.log(event);
+    if(/[a-z|A-Z]/.test(event.key) && event.key.length == 1){
+      event.preventDefault();
+    }
   }
 
   back(){
@@ -105,9 +163,9 @@ export class WSDetailsComponent implements OnInit{
       }
       this.wsdetails.values = data["values"];
       this.wsdetails.readyState = data.wsc["_readyState"];
-      this.wsdetails["data"] = data["data"];
-      for(let elem in this.wsdetails["data"]){
-        if(!this.valueidarray.includes(elem)) this.valueidarray.push(elem);
+      this.wsdetails.input = data["input"];
+      for(let elem in this.wsdetails["input"]){
+        if(!this.inputidarray.includes(elem)) this.inputidarray.push(elem);
       }
     });
   }
@@ -120,21 +178,20 @@ export class WSDetailsComponent implements OnInit{
     });
   }
 
-  deletewsdata(wsid, valueid){
-    this.http.post("http://" + this.requests.url + "/deletewsdata", { wsid: wsid, valueid: valueid }).subscribe(res => {
-      delete this.wsdetails.data[valueid];
-      this.valueidarray.splice(this.valueidarray.indexOf(valueid));
+  deletewsinput(wsid, inputid){
+    this.http.post("http://" + this.requests.url + "/deletewsinput", { wsid: wsid, inputid: inputid }).subscribe(res => {
+      delete this.wsdetails.data[inputid];
+      this.inputidarray.splice(this.inputidarray.indexOf(inputid));
       console.log(res);
     });
   }
 
-  savedata(valueid, attr, val, extras?){
+  savewsinput(inputid, attr, val){
     this.wss.close();
-    //this.wsobs.unsubscribe();
-    let data = { id: this.id, valueid: valueid, props: {} };
-    if(extras) data["extras"] = extras;
+    let data = { wsid: this.id, inputid: inputid, props: {} };
     data.props[attr] = val;
-    this.http.post("http://" + this.requests.url + "/setwsdata", data).subscribe(res => {
+    console.log(data);
+    this.http.post("http://" + this.requests.url + "/setwsinput", data).subscribe(res => {
       for(let attrs in res){
         if(attrs != "values") this.wsdetails[attrs] = res[attrs];
       }
