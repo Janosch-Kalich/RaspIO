@@ -127,7 +127,7 @@ As soon as the node.js program on the Raspberry Pi starts, it will try to connec
 |`/setwsoutput`|`{ wsid: ..., outputid: ... }`|`{ name: ..., desc: ..., ip: ..., hostname: ..., port: ..., pref: ..., input: { ... }, output: { ... }}`|
 |`/executewsoutput`|`{ id: ..., data: { type: ..., id: ..., value: ... } }`|`{}`|
 
-Datatypes as described in <a href="websockets.json">webbsockets.json</a> and:<br>
+Datatypes as described in <a href="websockets.json">websockets.json</a> and:<br>
 `error`: String<br>
 `ip`: String<br>
 `name`: String<br>
