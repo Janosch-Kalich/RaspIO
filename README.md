@@ -67,7 +67,7 @@ Datatypes as described in <a href="pins.json">pins.json</a> and:<br>
 <br>
 <h3 id="raspiinfo">Additional Information</h3>
 
-- When the program on the Raspberry Pi starts it will set every pin too it's specified `default` state.
+- When the program on the Raspberry Pi starts it will set every pin to it's specified `default` state.
 - The `type` attribute is mostly for UX and UI reasons, the Raspberry Pi can still `/getpin` for an output
 
 <br>
@@ -140,13 +140,13 @@ Datatypes as described in <a href="websockets.json">websockets.json</a> and:<br>
 <br>
 <h3 id="arduinoinfo">Additional Information</h3>
 
-- Inputs are declared by the Arduino when sending the value, (Web)App Clients need to refresh the page after a new input is added.
+- Inputs are declared by the Arduino when sending the value, (Web)App Clients don't need to refresh the page after a new input is added.
   
 - `/scan` scans from the **Raspberry Pi**, because of this some devices may be missing if connected to different Reapeaters, Switches or Hubs
 
-- `/testws` sends the first responds it gets from the Arduino and will most likely look like `13:0`.
+- `/testws` sends the first response it gets from the Arduino and will most likely look like `13:0`.
 
-- `/executewsoutput` data gets sent as it is on the **client** but still through the Raspberry Pi to prevent sending newer, not yet updated, information, when directly interacting with the API, not through the (Web)App, data types should match with the required ones to prevent crashes of the Arduino software. Additionally, when directly interacting with the API, it is possible to use custom properties
+- `/executewsoutput` data gets sent as it is on the **client** but still through the Raspberry Pi to prevent sending newer, not yet updated, information. When directly interacting with the API, not through the (Web)App, data types should match with the required ones to prevent crashes of the Arduino software. Additionally, when directly interacting with the API, it is possible to use custom properties
 
 - `/connectws` closes the previous connection to prevent multiple connections to the same Arduino
  
