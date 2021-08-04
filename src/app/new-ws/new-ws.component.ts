@@ -24,7 +24,7 @@ export class NewWSComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.requests.storageinit().then((url) => {
       this.url = this.requests.url = url;
-      this.http.post("http://" + this.url + "/scan", {}).subscribe((devices: any[]) => {
+      this.http.post(this.url + "/scan", {}).subscribe((devices: any[]) => {
         console.log(devices);
         this.devices = devices;
       })
@@ -54,7 +54,7 @@ export class NewWSComponent implements OnInit, AfterViewInit {
 
   test(){
     console.log({ "hostname": this.device.name, "ip": this.device.ip, "port": this.ws.port, "pref": this.ws.pref });
-    this.http.post("http://" + this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.ws.port }).subscribe((res: any) => {
+    this.http.post(this.url + "/testws", { "hostname": this.device.name, "ip": this.device.ip, "port": this.ws.port }).subscribe((res: any) => {
       console.log(res);
       if(res.msg){
         this.response.msg = res.msg;
@@ -70,12 +70,13 @@ export class NewWSComponent implements OnInit, AfterViewInit {
   }
 
   add(){
-    this.http.post("http://" + this.url + "/addws", {
-      "name": this.ws.name,  
+    this.http.post(this.url + "/addws", {
+      "name": this.ws.name,
+      "desc": this.ws.desc,
       "hostname": this.device.name,
       "ip": this.device.ip,
       "port": this.ws.port,
-      "pref": this.ws.pref
+      "pref": this.response.method
     }).subscribe(res => {
         this.router.navigate(["wsdetails"], { queryParams: { id: res["id"]} });
     })

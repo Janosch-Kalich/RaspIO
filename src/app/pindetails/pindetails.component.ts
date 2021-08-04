@@ -73,6 +73,6 @@ export class PinDetailsComponent implements OnInit {
 
   back(){
     this.ws.close();
-    this.router.navigateByUrl('/');
+    this.router.navigate(['/overview']);
   }
 }

@@ -1,5 +1,5 @@
 {
-	"appId": "io.ionic.starter",
+	"appId": "com.janoschkalich.raspio",
 	"appName": "RaspIO",
 	"webDir": "www",
 	"bundledWebRuntime": false

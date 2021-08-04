@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController, iosTransitionAnimation } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { RequestsService } from '../requests.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { RequestsService } from '../requests.service';
   styleUrls: ['./overview.component.scss'],
 })
 
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy{
   title: string = "Overview";
-  pins: any;
-  websockets: any;
+  pins: any = {};
+  websockets: any = {};
   pinidarray: any[] = [];
   wsidarray: any[] = [];
 
@@ -29,6 +29,7 @@ export class OverviewComponent implements OnInit {
           this.storage.set("url", data.url).then(() => {
             this.requests.url = data.url;
             this.requests.getAll().then(obj => {
+              console.log(obj);
               this.pins = obj["pins"];
               this.websockets = obj["ws"];
               for(let pin in this.pins["pins"]){
@@ -62,20 +63,24 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  refresh(e){
+  @HostListener("unloaded")
+  ngOnDestroy(){
+    console.log("AAA");
+  }
+
+  refresh(e?){
     this.pins = {};
     this.websockets = {};
     this.pinidarray = [];
     this.wsidarray = [];
     this.init();
-    setTimeout(() => { e.target.complete(); }, 500);
+    if(e) setTimeout(() => { e.target.complete(); }, 500);
   }
 
   ngOnInit() {
     this.init();
-
-      //this.pins = res["pins"];
-      //this.idarray = res["idarray"];
+    //this.pins = res["pins"];
+    //this.idarray = res["idarray"];
   }
 
   details(path, id){
@@ -110,11 +115,11 @@ export class OverviewComponent implements OnInit {
   }
 
   newPin(){
-    this.router.navigate(["newpin"]);
+    this.router.navigateByUrl("/newpin");
   }
 
   newWS(){
-    this.router.navigate(["newws"]);
+    this.router.navigateByUrl("/newws");
   }
 
   a(){

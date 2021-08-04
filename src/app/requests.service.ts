@@ -44,15 +44,15 @@ export class RequestsService implements OnInit {
   }
 
   public async getPin(id){
-    return await this.http.post("http://" + this.url + "/getpin", { "id": id }).toPromise();
+    return await this.http.post(this.url + "/getpin", { "id": id }).toPromise();
   }
 
   public async getWS(id){
-    return await this.http.post("http://" + this.url + "/getws", { "id": id}).toPromise();
+    return await this.http.post(this.url + "/getws", { "id": id}).toPromise();
   }
 
   public async getAll(){
-    return await this.http.post("http://" + this.url, {}).toPromise();
+    return await this.http.post(this.url, {}).toPromise();
   }
 
   async connectionerror(){
@@ -85,7 +85,7 @@ export class RequestsService implements OnInit {
       pincopy[attr] = val;
       let data = { id: id, props: {  }};
       data.props[attr] = val;
-      this.http.post("http://" + this.url + "/setpin", data).subscribe(res => {
+      this.http.post(this.url + "/setpin", data).subscribe(res => {
         return res;
       });
     }
@@ -107,7 +107,7 @@ export class RequestsService implements OnInit {
   }
 
   public async setpin(id, pin, state){
-    return await this.http.post("http://" + this.url + "/setpinstate", { id: id, state: state }).toPromise();
+    return await this.http.post(this.url + "/setpinstate", { id: id, state: state }).toPromise();
   }
 
   delete(id){
@@ -122,7 +122,7 @@ export class RequestsService implements OnInit {
         {
           text: "Confirm",
           handler: () => {
-            this.http.post("http://" + this.url + "/delete", { id: id }).subscribe(res => {
+            this.http.post(this.url + "/delete", { id: id }).subscribe(res => {
               if(res) this.router.navigate([""]);
             });
           }

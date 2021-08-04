@@ -45,13 +45,6 @@
           <ion-label position="floating">Port: </ion-label>
           <ion-input type="text" (keypress)="numbervalidation($event)" [(ngModel)]="ws.port" #ctrl="ngModel" placeholder="1 - 65535"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-label>Preferred connection method</ion-label>
-          <ion-select [(ngModel)]="ws.pref" #ctrl="ngModel">
-            <ion-select-option value="Hostname">Hostname</ion-select-option>
-            <ion-select-option value="IP">IP</ion-select-option>
-          </ion-select>
-        </ion-item>
         <div style="text-align: right; margin-top: 1%;">
           <ion-button (click)="test()">Next</ion-button>
         </div>

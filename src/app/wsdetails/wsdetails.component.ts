@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Event, Router } from '@angular/router';
 import { RequestsService } from '../requests.service';
 import { Subscription } from 'rxjs';
-import { Animation, AnimationController, IonSlide, IonSlides, ToastController } from '@ionic/angular';
+import { AlertController, Animation, AnimationController, IonSlide, IonSlides, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-wsdetails',
@@ -23,7 +23,7 @@ export class WSDetailsComponent implements OnInit{
   inputidarray: any[] = [];
   wssub: Subscription;
   
-  constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController, private animationcontroller: AnimationController) { }
+  constructor(private route: ActivatedRoute, private requests: RequestsService, private router: Router, private wss: WebsocketService, private http: HttpClient, private toastcontroller: ToastController, private animationcontroller: AnimationController, private alertcontroller: AlertController) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -73,7 +73,7 @@ export class WSDetailsComponent implements OnInit{
     let data = { id: this.id, props: {} };
     if(extras) data["extras"] = extras;
     data.props[attr] = val;
-    this.http.post("http://" + this.requests.url + "/setws", data).subscribe(res => {
+    this.http.post(this.requests.url + "/setws", data).subscribe(res => {
       for(let attrs in res){
         if(attrs != "values") this.wsdetails[attrs] = res[attrs];
       }
@@ -83,7 +83,7 @@ export class WSDetailsComponent implements OnInit{
   }
 
   addwsoutput(){
-    this.http.post("http://" + this.requests.url + "/addwsoutput", { wsid: this.id}).subscribe(res => {
+    this.http.post(this.requests.url + "/addwsoutput", { wsid: this.id}).subscribe(res => {
       this.outputidarray.push(res["id"]);
       this.wsdetails.output[res["id"]] = res["data"];
     });
@@ -97,7 +97,7 @@ export class WSDetailsComponent implements OnInit{
       data.props["value"] = this.wsdetails.output[outputid].data.value;
     }
     data.props[attr] = val;
-    this.http.post("http://" + this.requests.url + "/setwsoutput", data).subscribe(res => {
+    this.http.post(this.requests.url + "/setwsoutput", data).subscribe(res => {
       for(let attrs in res){
         if(attrs != "values") this.wsdetails[attrs] = res[attrs];
       }
@@ -112,7 +112,7 @@ export class WSDetailsComponent implements OnInit{
     if(this.wsdetails.output[outputid].data.type == 0) data.data["value"] = this.wsdetails.output[outputid].data.value == true ? "1" : "0";
     console.log(data);
     
-    this.http.post("http://" + this.requests.url + "/executewsoutput", data).subscribe(res => {
+    this.http.post(this.requests.url + "/executewsoutput", data).subscribe(res => {
       console.log(res);
     });
   }
@@ -126,7 +126,7 @@ export class WSDetailsComponent implements OnInit{
 
   back(){
     this.wss.close();
-    this.router.navigateByUrl("/overview");
+    this.router.navigate(["/overview"]);
   }
 
   connectws(url, id){
@@ -173,15 +173,23 @@ export class WSDetailsComponent implements OnInit{
   connectextws(){
     this.wss.close();
     this.connectws(this.requests.url, this.id);
-    this.http.post("http://" + this.requests.url + "/connectws", { id: this.id }).subscribe(res => {
+    this.http.post(this.requests.url + "/connectws", { id: this.id }).subscribe(res => {
       console.log(res);
     });
   }
 
-  deletewsinput(wsid, inputid){
-    this.http.post("http://" + this.requests.url + "/deletewsinput", { wsid: wsid, inputid: inputid }).subscribe(res => {
-      delete this.wsdetails.data[inputid];
+  deletewsinput(inputid){
+    this.http.post(this.requests.url + "/deletewsinput", { wsid: this.id, inputid: inputid }).subscribe(res => {
+      delete this.wsdetails.input[inputid];
       this.inputidarray.splice(this.inputidarray.indexOf(inputid));
+      console.log(res);
+    });
+  }
+
+  deletewsoutput(outputid){
+    this.http.post(this.requests.url + "/deletewsoutput", { wsid: this.id, outputid: outputid }).subscribe(res => {
+      delete this.wsdetails.output[outputid];
+      this. outputidarray.splice(this.outputidarray.indexOf(outputid));
       console.log(res);
     });
   }
@@ -191,12 +199,35 @@ export class WSDetailsComponent implements OnInit{
     let data = { wsid: this.id, inputid: inputid, props: {} };
     data.props[attr] = val;
     console.log(data);
-    this.http.post("http://" + this.requests.url + "/setwsinput", data).subscribe(res => {
+    this.http.post(this.requests.url + "/setwsinput", data).subscribe(res => {
       for(let attrs in res){
         if(attrs != "values") this.wsdetails[attrs] = res[attrs];
       }
       console.log(this.wsdetails);
       this.connectws(this.requests.url, this.id);
+    });
+  }
+
+  deletews(){
+    this.alertcontroller.create({
+      header: "Delete " + this.wsdetails.name + "?",
+      message: "This action cannot be undone",
+      buttons: [
+        {
+          text: "Cancel",
+          handler: () => {}
+        },
+        {
+          text: "OK",
+          handler: () => {
+            this.http.post(this.requests.url + "/deletews", { id: this.id }).subscribe((res) => {
+              if(res) this.back();
+            })
+          }
+        }
+      ]
+    }).then(alert => {
+      alert.present();
     });
   }
 
