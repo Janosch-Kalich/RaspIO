@@ -1,10 +1,20 @@
 <div>
   <ion-toolbar style="display: inline-block;">
-    <ion-icon name="arrow-back-sharp" style="margin-left: 1%;" size="large" (click)="router.navigate([''])" slot="start"></ion-icon>
+    <ion-icon name="arrow-back-sharp" style="margin-left: 9px;" size="large" (click)="router.navigate([''])" slot="start"></ion-icon>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
   <ion-item>
-    <ion-label>URL: </ion-label>
-    <ion-input placeholder="raspberrypi:1234" slot="end" style="text-align: right;" [(ngModel)]="url" #ctrl="ngModel" (ionChange)="save()"></ion-input>
+    <ion-label position="floating">URL:</ion-label>
+    <ion-input placeholder="raspberrypi:1234" [(ngModel)]="url" #ctrl="ngModel" (change)="save()"></ion-input>
   </ion-item>
+  <a href="https://raspio.janosch-kalich.com/raspidocs.html" style="text-decoration: none;">
+    <ion-item>
+      <ion-label>Rapberry Pi API Documentation</ion-label>
+    </ion-item>
+  </a>
+  <a href="https://raspio.janosch-kalich.com/arduinodocs.html" style="text-decoration: none;">
+    <ion-item>
+      <ion-label>Arduino API Documentation</ion-label>
+    </ion-item>
+  </a>
 </div>

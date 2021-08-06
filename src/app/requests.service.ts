@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
 })
 export class RequestsService implements OnInit {
   public url: string;
+  public pins: any = {};
+  public websockets: any = {};
+  public pinidarray: any[] = [];
+  public wsidarray: any[] = [];
 
   constructor(private http: HttpClient, private alertcontroller: AlertController, private storage: Storage, private router: Router) { }
 
@@ -51,8 +55,24 @@ export class RequestsService implements OnInit {
     return await this.http.post(this.url + "/getws", { "id": id}).toPromise();
   }
 
-  public async getAll(){
-    return await this.http.post(this.url, {}).toPromise();
+  public getAll(){
+    this.http.post(this.url, {}).subscribe(obj => {
+      this.pinidarray = [];
+      this.wsidarray = [];
+      this.pins = obj["pins"];
+      this.websockets = obj["ws"];
+      console.log(this.websockets);
+      for(let pin in this.pins["pins"]){
+        this.pinidarray.push(pin);
+      }
+      for(let ws in this.websockets["websockets"]){
+        console.log(ws);
+        this.wsidarray.push(ws);
+      }
+      },(err => {
+        this.connectionerror();
+      })
+    );
   }
 
   async connectionerror(){

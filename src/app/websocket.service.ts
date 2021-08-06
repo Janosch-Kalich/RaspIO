@@ -20,7 +20,7 @@ export class WebsocketService{
   }
 
   private create(url, msg): Rx.Subject<MessageEvent>{
-    this.ws = new WebSocket("ws://" + url);
+    this.ws = new WebSocket("ws://" + url.split("//")[1]);
 
     console.log("BBB");
 

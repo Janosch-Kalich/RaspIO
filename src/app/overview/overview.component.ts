@@ -13,10 +13,6 @@ import { RequestsService } from '../requests.service';
 
 export class OverviewComponent implements OnInit, OnDestroy{
   title: string = "Overview";
-  pins: any = {};
-  websockets: any = {};
-  pinidarray: any[] = [];
-  wsidarray: any[] = [];
 
   constructor(private http: HttpClient, private storage: Storage, private alertcontroller: AlertController, private router: Router, private requests: RequestsService) {}
 
@@ -28,37 +24,12 @@ export class OverviewComponent implements OnInit, OnDestroy{
           console.log(data.url);
           this.storage.set("url", data.url).then(() => {
             this.requests.url = data.url;
-            this.requests.getAll().then(obj => {
-              console.log(obj);
-              this.pins = obj["pins"];
-              this.websockets = obj["ws"];
-              for(let pin in this.pins["pins"]){
-                this.pinidarray.push(pin);
-              }
-              for(let ws in this.websockets["websockets"]){
-                this.wsidarray.push(ws);
-              }
-            }).catch(err => {
-              this.requests.connectionerror();
-            });
+            this.requests.getAll();
           });
         });
       }
       else {
-        this.requests.getAll().then(obj => {
-          this.pins = obj["pins"];
-          this.websockets = obj["ws"];
-          console.log(this.websockets);
-          for(let pin in this.pins["pins"]){
-            this.pinidarray.push(pin);
-          }
-          for(let ws in this.websockets["websockets"]){
-            console.log(ws);
-            this.wsidarray.push(ws);
-          }
-        }).catch(err => {
-          this.requests.connectionerror();
-        })
+        this.requests.getAll();
       }
     });
   }
@@ -69,10 +40,6 @@ export class OverviewComponent implements OnInit, OnDestroy{
   }
 
   refresh(e?){
-    this.pins = {};
-    this.websockets = {};
-    this.pinidarray = [];
-    this.wsidarray = [];
     this.init();
     if(e) setTimeout(() => { e.target.complete(); }, 500);
   }

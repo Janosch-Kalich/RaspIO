@@ -72,7 +72,14 @@ export class PinDetailsComponent implements OnInit {
   }
 
   back(){
-    this.ws.close();
-    this.router.navigate(['/overview']);
+    try{
+      this.ws.close();
+    }
+    catch(e){
+      console.log(e);
+    }
+    this.router.navigate(['/overview']).then(() => {
+      this.requests.getAll();
+    });
   }
 }

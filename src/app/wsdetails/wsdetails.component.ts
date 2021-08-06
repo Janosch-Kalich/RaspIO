@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../websocket.service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Event, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { AlertController, Animation, AnimationController, IonSlide, IonSlides, T
   styleUrls: ['./wsdetails.component.scss'],
 })
 
-export class WSDetailsComponent implements OnInit{
+export class WSDetailsComponent implements OnInit, OnDestroy{
   @ViewChild("slides") slides: IonSlides;
 
   hiddenoutput: any = {};
@@ -34,6 +34,7 @@ export class WSDetailsComponent implements OnInit{
           this.wsdetails = ws;
           if(!this.wsdetails.input) this.wsdetails.input = {};
           this.inputidarray = [];
+          this.outputidarray = [];
           for(let valueid in this.wsdetails.input){
             this.inputidarray.push(valueid);
             if(!this.wsdetails.input[valueid]) this.wsdetails.input[valueid] = {};
@@ -125,8 +126,20 @@ export class WSDetailsComponent implements OnInit{
   }
 
   back(){
-    this.wss.close();
-    this.router.navigate(["/overview"]);
+    try{
+      this.wss.close();
+    }
+    catch(e){
+      console.log(e);
+    }
+    this.router.navigate(["/overview"]).then(() => {
+      this.requests.getAll();
+    });
+  }
+
+  @HostListener("unloaded")
+  ngOnDestroy(){
+    console.log("AA");
   }
 
   connectws(url, id){

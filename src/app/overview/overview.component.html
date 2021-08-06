@@ -1,6 +1,6 @@
 <ion-toolbar style="display: inline-block;">
-  <ion-icon name="settings-sharp" slot="end" style="margin-right: 1.5%;" size="large" (click)="router.navigate(['/settings'])"></ion-icon>
-  <ion-button color="success" slot="secondary" style="margin-right: 1%;" (click)="new()">New</ion-button>
+  <ion-icon name="settings-sharp" slot="end" style="margin-right: 9px;" size="large" (click)="router.navigate(['/settings'])"></ion-icon>
+  <ion-button color="success" slot="secondary" style="margin-right: 13px;" (click)="new()">New</ion-button>
   <ion-title>{{ title }}</ion-title>
 </ion-toolbar>
 <ion-content>
@@ -11,18 +11,18 @@
     <ion-card-header>
       <ion-card-title>Pins</ion-card-title>
     </ion-card-header>
-    <ion-list *ngFor="let id of pinidarray">
-      <ion-item (click)="details('pindetails', id)">{{ pins.pins[id].name }}</ion-item>
+    <ion-list *ngFor="let id of requests.pinidarray">
+      <ion-item (click)="details('/pindetails', id)">{{ requests.pins.pins[id].name }}</ion-item>
     </ion-list>
   </ion-card>
   <ion-card>
     <ion-card-header>
       <ion-card-title>Websockets</ion-card-title>
     </ion-card-header>
-    <ion-list *ngFor="let id of wsidarray">
-      <ion-item (click)="details('wsdetails', id)">
-        {{ websockets.websockets[id].name }}
-        <ion-badge color="danger" slot="end" style="width: 2%;" *ngIf="websockets.websockets[id].readyState != 1">!</ion-badge>
+    <ion-list *ngFor="let id of requests.wsidarray">
+      <ion-item (click)="details('/wsdetails', id)">
+        {{ requests.websockets.websockets[id].name }}
+        <ion-badge color="danger" slot="end" style="width: 2%;" *ngIf="requests.websockets.websockets[id].readyState != 1">!</ion-badge>
       </ion-item>
     </ion-list>
   </ion-card>
